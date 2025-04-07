@@ -47,14 +47,14 @@
 | 분야 | 기술 스택 |
 |------|-----------|
 | Backend | Java, Spring Boot, JPA |
-| Frontend | Thymeleaf, HTML, CSS, Bootstrap |
+| Frontend | HTML, CSS, Bootstrap |
 | DB | MySQL |
 | API | Kakao Map API, 공공데이터포털 (CSV 기반) |
 | 기타 | Spring Security, 서버 세션 기반 로그인 관리 |
 
 ---
 
-## 📁 프로젝트 구조 (예시)
+## 📁 프로젝트 구조 
 
 ```
 HappyHouse/
