@@ -76,7 +76,7 @@ HappyHouse/
 
 | 지도 검색 | 아파트 정보 | 병원 정보 |
 |-----------|--------------|-------------|
-| ![map](images/map_search.png)  |
+| (images/map_search.png)  |
 
 ---
 
