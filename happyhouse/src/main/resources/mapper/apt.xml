@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.model.mapper.HouseMapMapper">
+
+	<select id="getSido" resultType="sidoGugunCodeDto">
+		select left(sidoCode,2) sidoCode, sidoName
+		from sidocode
+		order by sidoCode
+	</select>
+	
+	<select id="getGugunInSido" parameterType="string" resultType="sidoGugunCodeDto">
+		select left(gugunCode,5) gugunCode, gugunName
+		from guguncode
+		where left(gugunCode,2) = #{sido}
+		order by gugunName
+	</select>
+	
+	<select id="getDongInGugun" parameterType="string" resultType="dongDto">
+		select dongName,dongCode
+		from dongcode
+		where left(dongcode,5) = #{gugun} 
+		and dongName is not null
+		order by dongName
+	</select>
+	
+	<select id="getAptInDong" parameterType="string" resultType="houseInfoDto">
+		select h.aptCode, h.apartmentName, h.buildyear, h.dongCode, h.dong as dongName, h.jibun, h.lat, h.lng,
+				(select dealAmount from housedeal where aptCode = h.aptCode and no = (select max(no) from housedeal where aptCode = h.aptCode)) recentPrice,
+				(select floor from housedeal where aptCode = h.aptCode and no = (select max(no) from housedeal where aptCode = h.aptCode)) floor,
+				(select concat(dealYear,'-',dealMonth,'-',dealDay) from housedeal where aptCode = h.aptCode and no = (select max(no) from housedeal where aptCode = h.aptCode)) sellYear
+		from houseinfo h
+		where dongCode = #{dong}
+		order by apartmentName
+	</select>
+	<select id="getAptInName" parameterType="string" resultType="houseInfoDto">
+		select h.aptCode, h.apartmentName, h.buildyear, h.dongCode, h.dong as dongName, h.jibun, h.lat, h.lng,
+				(select dealAmount from housedeal where aptCode = h.aptCode and no = (select max(no) from housedeal where aptCode = h.aptCode)) recentPrice,
+				(select floor from housedeal where aptCode = h.aptCode and no = (select max(no) from housedeal where aptCode = h.aptCode)) floor,
+				(select concat(dealYear,'-',dealMonth,'-',dealDay) from housedeal where aptCode = h.aptCode and no = (select max(no) from housedeal where aptCode = h.aptCode)) sellYear
+		from houseinfo h
+		where apartmentName like concat('%',#{apt},'%')
+		<include refid="search"></include>
+		order by apartmentName
+	</select>
+	
+	<select id="getAvgList" parameterType="map" resultType="AvgListDto">
+		select d.dealYear,  (select gugunName from dongcode where h.dongCode=dongCode) gugunName, avg(replace(dealAmount,',','')) avg, count(d.no) count
+		from houseinfo h, housedeal d
+		where dongCode=#{dong} 
+		and h.aptCode = d.aptCode
+		and d.area between #{min} and #{max}
+		group by d.dealYear;
+	</select>
+	
+	<select id="getAvgListSinCity" parameterType="map" resultType="AvgListDto">
+		select (select gugunName from dongCode where dongCode.dongCode=h.dongCode) gugunName, d.dealYear,count(d.no) count,avg(replace(dealAmount,',','')) avg
+		from houseinfo h, housedeal d
+		where h.dongCode in (select dongCode from sinCity)
+		and h.aptCode = d.aptCode
+		and d.area between #{min} and #{max}
+		group by h.sigunguCode, d.dealYear;
+	</select>
+	
+		<select id="getAptInMax" parameterType="string" resultType="houseInfoDto">
+			select h.aptCode, h.aptName, h.buildyear, h.dongCode, h.dongName, h.jibun, h.lat, h.lng, si.sidoname, gu.gugunname,
+				(select dealAmount from housedeal where aptCode = h.aptCode and no = (select max(no) from housedeal where aptCode = h.aptCode)) recentPrice
+		from houseinfo h
+		left join sidocode si
+		on left(h.dongcode,2) = left(si.sidocode,2)
+		left join guguncode gu
+		on left(h.dongcode,5) = left(gu.guguncode,5)
+		order by aptName
+	</select>
+	
+	<select id="getAptbyId" parameterType="int" resultType="houseInfoDto">
+			select h.aptCode, h.aptName, h.buildyear, h.dongCode, h.dongName, h.jibun, h.lat, h.lng, si.sidoname, gu.gugunname,
+				(select dealAmount from housedeal where aptCode = h.aptCode and no = (select max(no) from housedeal where aptCode = h.aptCode)) recentPrice
+		from houseinfo h
+		left join sidocode si
+		on left(h.dongcode,2) = left(si.sidocode,2)
+		left join guguncode gu
+		on left(h.dongcode,5) = left(gu.guguncode,5)
+		where aptCode = #{apt}
+		order by aptName
+	</select>
+	
+		<sql id="search">
+		<if test="state != null">
+			<if test="state.length==2">
+				and  left(dongCode,2) = #{state}
+			</if>
+			<if test="state.length==5">
+				and  left(dongCode,5) = #{state}
+			</if>
+			<if test="state.length==10">
+				and  dongCode= #{state}
+			</if>	
+		</if>
+	</sql>
+	
+</mapper>

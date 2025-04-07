@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.model.mapper.AnswerMapper">
+
+	<!-- 답변 리스트 -->
+	<select id="selectAnswer" resultType="Answer">
+		select qnano, ansno, answriter, anscontent, isselected, isrecommended, upvote, regtime
+		from answers 
+		order by ansno desc
+	</select>
+	
+	<!-- 특정 질문에 대한 답변 리스트 -->
+	<select id="selectAnswerByNo" parameterType="int" resultType="Answer">
+		select qnano, ansno, answriter, anscontent, isselected, isrecommended, upvote, regtime
+		from answers 
+		where qnano = #{qnano}
+	</select>
+	
+	<!-- 답변 번호로 검색 -->
+    <select id="detailAnswer" parameterType="int" resultType="Answer">
+		select qnano, ansno, answriter, anscontent, isselected, isrecommended, upvote, regtime
+		from answers 
+		where ansno = #{ansno}
+	</select>
+	
+	<!-- 답변 등록 -->
+	<insert id="insertAnswer" parameterType="Answer">
+		insert into answers(
+			qnano, answriter, anscontent, isselected, isrecommended, upvote
+		) values (
+			#{qnano}, #{answriter}, #{anscontent}, #{isselected}, #{isrecommended}, #{upvote}
+		)
+	</insert>
+	
+	<!-- 답변 수정 -->
+	<update id="updateAnswer" parameterType="Answer">
+		update answers 
+		   set anscontent = #{anscontent}, 
+		       isselected = #{isselected}, 
+		       isrecommended = #{isrecommended},
+		   	   upvote = #{upvote}
+		 where ansno = #{ansno}
+	</update>
+
+	<!-- 답변 번호로 답변 삭제 -->
+	<delete id="deleteAnswer" parameterType="int">
+		delete 
+		from answers 
+		where ansno = #{ansno}
+	</delete>
+	
+	<!-- 질문 번호로 답변들 삭제 -->
+	<delete id="deleteAnswerByQnano" parameterType="int">
+		delete 
+		from answers 
+		where qnano = #{qnano}
+	</delete>
+
+</mapper>
+

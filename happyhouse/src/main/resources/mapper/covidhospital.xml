@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.model.mapper.CovidHospitalMapper">
+
+	<select id="listHospital" resultType="CovidHospital">
+	   select hospitalname, phone, address, isclinic, ispcr, address, lat, lng, sigungu
+	   from covidhospital
+	</select>
+	
+	<select id="getHospital" parameterType="String" resultType="CovidHospital">
+	   select hospitalname, phone, address, isclinic, ispcr, address, lat, lng, sigungu
+	   from covidhospital
+	   where hospitalname like CONCAT('%', #{hospitalname},'%');
+	
+	</select>
+	
+	<select id="getHospitalByLoc" parameterType="String" resultType="CovidHospital">
+	   select hospitalname, phone, address, isclinic, ispcr, address, lat, lng, sigungu
+	   from covidhospital
+	   where sigungu like CONCAT('%', #{sigungu},'%');
+	</select>
+	
+	<insert id="registerHospital" parameterType="CovidHospital">
+	    insert into covidhospital(hospitalname, phone, address, lat, lng, israt, isclinic, ispcr, sigungu)
+	    values (#{hospitalname}, #{phone}, #{address}, #{lat}, #{lng}, #{israt}, #{isclinic}, #{ispcr}, #{sigungu})	
+	</insert> 
+	
+</mapper>
