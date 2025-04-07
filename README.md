@@ -58,16 +58,34 @@
 
 ```
 HappyHouse/
-├── src/
-│   ├── controller/
-│   ├── service/
-│   ├── repository/
-│   ├── model/
-│   └── templates/
-├── static/
+├── happyhouse/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/
+│   │   │   │       └── ssafy/
+│   │   │   │           └── happyhouse/
+│   │   │   │               ├── controller/
+│   │   │   │               ├── model/
+│   │   │   │               │   ├── dto/
+│   │   │   │               │   └── service/
+│   │   │   │               ├── repository/
+│   │   │   │               └── HappyhouseApplication.java
+│   │   │   └── resources/
+│   │   │       ├── static/
+│   │   │       └── templates/
+│   │   └── test/
+│   └── pom.xml
 ├── images/
-├── data/
+├── vue_happyhouse/
+│   ├── public/
+│   └── src/
+│       ├── assets/
+│       ├── components/
+│       ├── router/
+│       └── views/
 └── README.md
+
 ```
 
 ---
